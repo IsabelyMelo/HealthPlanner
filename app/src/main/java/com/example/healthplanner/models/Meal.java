@@ -1,31 +1,30 @@
 package com.example.healthplanner.models;
 
+import java.time.LocalDateTime;
+
 public class Meal {
     private int id;
     private String name;
-    private String quantity;
-    private int calories;
+    private int calorie;
+    private LocalDateTime mealtime;
     private MealType mealType;
-    private String date;
 
     public Meal() {
     }
 
-    public Meal(String name, String quantity, int calories, MealType mealType, String date) {
+    public Meal(String name, int calorie, LocalDateTime mealtime, MealType mealType) {
         this.name = name;
-        this.quantity = quantity;
-        this.calories = calories;
+        this.calorie = calorie;
+        this.mealtime = mealtime;
         this.mealType = mealType;
-        this.date = date;
     }
 
-    public Meal(int id, String name, String quantity, int calories, MealType mealType, String date) {
+    public Meal(int id, String name, int calorie, LocalDateTime mealtime, MealType mealType) {
         this.id = id;
         this.name = name;
-        this.quantity = quantity;
-        this.calories = calories;
+        this.calorie = calorie;
+        this.mealtime = mealtime;
         this.mealType = mealType;
-        this.date = date;
     }
 
     public int getId() {
@@ -44,20 +43,20 @@ public class Meal {
         this.name = name;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public int getCalorie() {
+        return calorie;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setCalorie(int calorie) {
+        this.calorie = calorie;
     }
 
-    public int getCalories() {
-        return calories;
+    public LocalDateTime getMealtime() {
+        return mealtime;
     }
 
-    public void setCalories(int calories) {
-        this.calories = calories;
+    public void setMealtime(LocalDateTime mealtime) {
+        this.mealtime = mealtime;
     }
 
     public MealType getMealType() {
@@ -66,13 +65,5 @@ public class Meal {
 
     public void setMealType(MealType mealType) {
         this.mealType = mealType;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 }

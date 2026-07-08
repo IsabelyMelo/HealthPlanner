@@ -1,0 +1,67 @@
+classDiagram
+    class Goal {
+        -int id
+        -int dailyCalorieGoal
+        -LocalDateTime beginDate
+        -LocalDateTime endDate
+        -boolean currentGoal
+        +getId() int
+        +getDailyCalorieGoal() int
+        +getBeginDate() LocalDateTime
+        +getEndDate() LocalDateTime
+        +isCurrentGoal() boolean
+    }
+
+    class Meal {
+        -int id
+        -String name
+        -int calorie
+        -LocalDateTime mealtime
+        -MealType mealType
+        +getId() int
+        +getName() String
+        +getCalorie() int
+        +getMealtime() LocalDateTime
+        +getMealType() MealType
+    }
+
+    class MealType {
+        <<enumeration>>
+        MAINMEAL
+        SNACK
+        SUPPLEMENT
+        -String value
+        -String label
+        +fromValue(String) MealType
+    }
+
+    class DatabaseHelper {
+        -String DATABASE_NAME
+        -int DATABASE_VERSION
+        +onCreate(SQLiteDatabase)
+        +onUpgrade(SQLiteDatabase, int, int)
+        +insertGoal(Goal)
+        +getCurrentGoal() Goal
+        +getGoalForDate(LocalDateTime) Goal
+        +insertMeal(Meal)
+        +getMealsForDate(LocalDateTime) List~Meal~
+        +getTotalCaloriesForDate(LocalDateTime) int
+    }
+
+    class MainActivity {
+        +onCreate(Bundle)
+    }
+
+    class GoalActivity {
+        +onCreate(Bundle)
+    }
+
+    class MealActivity {
+        +onCreate(Bundle)
+    }
+
+    Meal o-- MealType : uses
+    DatabaseHelper ..> Goal : manages
+    DatabaseHelper ..> Meal : manages
+    MainActivity ..> GoalActivity : navigates
+    MainActivity ..> MealActivity : navigates
