@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".GoalActivity" />
         <activity android:name=".MealActivity" />
+        <activity android:name=".HistoryActivity" />
     </application>
 
 </manifest>

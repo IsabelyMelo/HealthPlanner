@@ -18,7 +18,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "health_planner.db";
-    private static final int DATABASE_VERSION = 2; // Incremented version
+    private static final int DATABASE_VERSION = 3; // Incremented version to 3
 
     // Table names
     private static final String TABLE_GOALS = "goals";
@@ -32,7 +32,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DAILY_CALORIE_GOAL = "daily_calorie_goal";
     private static final String COLUMN_BEGIN_DATE = "begin_date";
     private static final String COLUMN_END_DATE = "end_date";
-    private static final String COLUMN_CURRENT_GOAL = "current_goal";
 
     // Meals table columns
     private static final String COLUMN_NAME = "name";
@@ -53,8 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_NAME_GOAL + " TEXT,"
                 + COLUMN_DAILY_CALORIE_GOAL + " INTEGER,"
                 + COLUMN_BEGIN_DATE + " TEXT,"
-                + COLUMN_END_DATE + " TEXT,"
-                + COLUMN_CURRENT_GOAL + " INTEGER"
+                + COLUMN_END_DATE + " TEXT"
                 + ")";
 
         String CREATE_MEALS_TABLE = "CREATE TABLE " + TABLE_MEALS + "("
@@ -71,8 +69,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            db.execSQL("ALTER TABLE " + TABLE_GOALS + " ADD COLUMN " + COLUMN_NAME_GOAL + " TEXT");
+        if (oldVersion < 3) {
+            // Drop and recreate goals table to remove current_goal column and reset
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_GOALS);
+            
+            // Re-create ONLY the goals table
+            String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS + "("
+                    + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + COLUMN_NAME_GOAL + " TEXT,"
+                    + COLUMN_DAILY_CALORIE_GOAL + " INTEGER,"
+                    + COLUMN_BEGIN_DATE + " TEXT,"
+                    + COLUMN_END_DATE + " TEXT"
+                    + ")";
+            db.execSQL(CREATE_GOALS_TABLE);
         }
     }
 
@@ -81,18 +90,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insertGoal(Goal goal) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // If this is the current goal, handle the replacement logic
-        if (goal.isCurrentGoal()) {
+        // If this is an active goal (no end date), terminate the previous active goal
+        if (goal.getEndDate() == null) {
             Goal current = getCurrentGoal();
             if (current != null) {
-                // Check if the current goal was started today
+                // If the current goal was started today, delete it (same day replacement)
                 if (current.getBeginDate().toLocalDate().equals(goal.getBeginDate().toLocalDate())) {
-                    // Delete it if it's from the same day
                     db.delete(TABLE_GOALS, COLUMN_ID + " = ?", new String[]{String.valueOf(current.getId())});
                 } else {
-                    // Otherwise, just end it
+                    // Otherwise, set end date to now (or begin date of the new goal)
                     ContentValues values = new ContentValues();
-                    values.put(COLUMN_CURRENT_GOAL, 0);
                     values.put(COLUMN_END_DATE, goal.getBeginDate().format(formatter));
                     db.update(TABLE_GOALS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(current.getId())});
                 }
@@ -104,14 +111,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_DAILY_CALORIE_GOAL, goal.getDailyCalorieGoal());
         values.put(COLUMN_BEGIN_DATE, goal.getBeginDate().format(formatter));
         values.put(COLUMN_END_DATE, goal.getEndDate() != null ? goal.getEndDate().format(formatter) : null);
-        values.put(COLUMN_CURRENT_GOAL, goal.isCurrentGoal() ? 1 : 0);
 
         db.insert(TABLE_GOALS, null, values);
     }
 
     public Goal getCurrentGoal() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_GOALS, null, COLUMN_CURRENT_GOAL + " = 1", null, null, null, null);
+        // Active goal is the one with no end date
+        Cursor cursor = db.query(TABLE_GOALS, null, COLUMN_END_DATE + " IS NULL", null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             Goal goal = cursorToGoal(cursor);
@@ -152,14 +159,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Goal goal = getGoalById(id);
         
         if (goal != null) {
-            // If created and ended on the same day, delete it
+            // If created and ended on the same day, delete it to avoid clutter
             if (goal.getBeginDate().toLocalDate().equals(endDate.toLocalDate())) {
                 db.delete(TABLE_GOALS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
             } else {
-                // Otherwise, mark as ended
+                // Otherwise, mark as ended by setting the end date
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_END_DATE, endDate.format(formatter));
-                values.put(COLUMN_CURRENT_GOAL, 0);
                 db.update(TABLE_GOALS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
             }
         }
@@ -169,7 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String dateString = date.format(formatter);
 
-        // Find goal where date is between begin and end, OR end is null and it's the current goal
+        // Find goal where date is between begin and end, OR end is null
         String selection = "(" + COLUMN_BEGIN_DATE + " <= ? AND (" + COLUMN_END_DATE + " >= ? OR " + COLUMN_END_DATE + " IS NULL))";
         String[] selectionArgs = {dateString, dateString};
 
@@ -193,7 +199,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (endDateStr != null) {
             goal.setEndDate(LocalDateTime.parse(endDateStr, formatter));
         }
-        goal.setCurrentGoal(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CURRENT_GOAL)) == 1);
+        // Current goal is true if end date is null
+        goal.setCurrentGoal(goal.getEndDate() == null);
         return goal;
     }
 
@@ -247,6 +254,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return total;
+    }
+
+    public List<String> getDistinctDaysWithMeals() {
+        List<String> days = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        
+        // Extract YYYY-MM-DD from the ISO datetime string
+        String query = "SELECT DISTINCT substr(" + COLUMN_MEALTIME + ", 1, 10) as day FROM " + TABLE_MEALS 
+                     + " ORDER BY day DESC";
+        
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                days.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return days;
+    }
+
+    public void deleteMeal(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_MEALS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public int clearAllMeals() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_MEALS, null, null);
     }
 
     private Meal cursorToMeal(Cursor cursor) {

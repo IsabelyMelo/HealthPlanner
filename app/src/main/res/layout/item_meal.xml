@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvMealName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Nome da Refeição"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btnDeleteMeal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMealDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Lanche - 250 kcal"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/btnDeleteMeal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMealName" />
+
+        <TextView
+            android:id="@+id/tvMealDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Consumido em: 17/06/2026 12:30"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintEnd_toStartOf="@+id/btnDeleteMeal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMealDetails" />
+
+        <ImageButton
+            android:id="@+id/btnDeleteMeal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/holo_red_dark" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MealActivity">
+    tools:context=".HistoryActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -12,26 +12,15 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Gerenciar Refeições"
+        app:title="Histórico de Dias"
         app:titleTextColor="@android:color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMeals"
+        android:id="@+id/rvHistory"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddMeal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white"
-        android:contentDescription="Adicionar refeição"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
