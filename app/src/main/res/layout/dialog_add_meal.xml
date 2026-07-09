@@ -29,6 +29,39 @@
         android:inputType="number"
         android:layout_marginBottom="8dp"/>
 
+    <CheckBox
+        android:id="@+id/cbEstimateCalories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estimar Calorias"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:id="@+id/layoutCalorieEstimate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp">
+
+        <EditText
+            android:id="@+id/etMealDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="Descreva a refeição e a porção"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="3"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnEstimateCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Estimar"/>
+
+    </LinearLayout>
+
     <Spinner
         android:id="@+id/spMealType"
         android:layout_width="match_parent"
