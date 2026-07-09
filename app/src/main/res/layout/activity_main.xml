@@ -84,9 +84,11 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:weightSum="3"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,9 +96,10 @@
 
         <LinearLayout
             android:id="@+id/btnMeal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="-3dp"
+            android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
@@ -104,23 +107,26 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_today"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/meal_icon"
                 app:tint="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Refeições"
-                android:textSize="14sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/btnGoal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="-3dp"
+            android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
@@ -128,23 +134,26 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_manage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/goals_icon"
                 app:tint="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="Metas"
-                android:textSize="14sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/btnHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
@@ -152,16 +161,18 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@android:drawable/ic_menu_recent_history"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/history_daily_meal_icon"
                 app:tint="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Histórico"
-                android:textSize="14sp" />
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
     </LinearLayout>
