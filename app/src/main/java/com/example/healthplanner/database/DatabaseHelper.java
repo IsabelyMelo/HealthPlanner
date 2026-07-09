@@ -279,6 +279,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_MEALS, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
+    public Meal getLastMeal() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_MEALS, null, null, null, null, null, COLUMN_MEALTIME + " DESC", "1");
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Meal meal = cursorToMeal(cursor);
+            cursor.close();
+            return meal;
+        }
+        return null;
+    }
+
     public int clearAllMeals() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_MEALS, null, null);

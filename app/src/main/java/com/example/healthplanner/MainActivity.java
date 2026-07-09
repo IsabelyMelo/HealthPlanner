@@ -1,6 +1,9 @@
 package com.example.healthplanner;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -9,12 +12,20 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.healthplanner.database.DatabaseHelper;
 import com.example.healthplanner.models.Goal;
+import com.example.healthplanner.workers.MealIntervalWorker;
+
+import java.util.concurrent.TimeUnit;
 
 import java.time.LocalDateTime;
 
@@ -70,6 +81,33 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        requestNotificationPermission();
+        setupMealIntervalWorker();
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+    }
+
+    private void setupMealIntervalWorker() {
+        OneTimeWorkRequest mealIntervalRequest =
+                new OneTimeWorkRequest.Builder(MealIntervalWorker.class)
+                        .setInitialDelay(1, TimeUnit.MINUTES)
+                        .addTag("MealIntervalTest")
+                        .build();
+
+        WorkManager.getInstance(this).enqueueUniqueWork(
+                "MealIntervalWorkTest",
+                ExistingWorkPolicy.KEEP,
+                mealIntervalRequest
+        );
     }
 
     @Override
