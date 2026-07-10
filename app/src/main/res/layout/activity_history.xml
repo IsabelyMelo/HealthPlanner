@@ -13,6 +13,8 @@
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Histórico de Dias"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@android:color/white"
         app:titleTextColor="@android:color/white" />
 
     <androidx.recyclerview.widget.RecyclerView

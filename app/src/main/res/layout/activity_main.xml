@@ -37,9 +37,9 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:progressDrawable="@android:drawable/progress_horizontal"
                 android:progress="0"
                 android:max="100"
+                android:progressTint="@color/purple_500"
                 android:layout_marginBottom="16dp"/>
 
             <LinearLayout
@@ -109,15 +109,14 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/meal_icon"
-                app:tint="@color/black" />
+                android:src="@drawable/meal_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:text="Refeições"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -136,15 +135,14 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/goals_icon"
-                app:tint="@color/black" />
+                android:src="@drawable/goals_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:text="Metas"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -163,16 +161,15 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/history_daily_meal_icon"
-                app:tint="@color/black" />
+                android:src="@drawable/history_daily_meal_icon"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Histórico"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
 
     </LinearLayout>

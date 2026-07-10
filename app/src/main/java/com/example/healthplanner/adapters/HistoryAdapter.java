@@ -3,7 +3,6 @@ package com.example.healthplanner.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -55,7 +54,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         boolean isExpanded = expandedPositions.contains(position);
         holder.layoutExpandable.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.ivExpandIcon.setRotation(isExpanded ? 180 : 0);
 
         if (isExpanded) {
             // Use end of day to find the goal that was active during this day
@@ -105,7 +103,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     static class HistoryViewHolder extends RecyclerView.ViewHolder {
         TextView tvHistoryDate, tvHistoryTotalCalories, tvHistoryGoalName, tvHistoryProgressText, tvHistoryMealsList;
         ProgressBar pbHistoryCalories;
-        ImageView ivExpandIcon;
         LinearLayout layoutExpandable;
         View layoutHeader;
 
@@ -117,7 +114,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             tvHistoryProgressText = itemView.findViewById(R.id.tvHistoryProgressText);
             tvHistoryMealsList = itemView.findViewById(R.id.tvHistoryMealsList);
             pbHistoryCalories = itemView.findViewById(R.id.pbHistoryCalories);
-            ivExpandIcon = itemView.findViewById(R.id.ivExpandIcon);
             layoutExpandable = itemView.findViewById(R.id.layoutExpandable);
             layoutHeader = itemView.findViewById(R.id.layoutHeader);
         }
